@@ -1,45 +1,55 @@
+function formattedDate(date) {
+  let days = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+
+  let months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  let hours = now.getHours();
+  if (hours < 10) {
+    hours = `0${hours}`;
+  }
+  let minutes = now.getMinutes();
+  if (minutes < 10) {
+    minutes = `0${minutes}`;
+  }
+  let month = months[now.getMonth()];
+  let dayOfWeek = days[now.getDay()];
+
+  return `${dayOfWeek}<br>${hours}:${minutes}`;
+}
+
+/// Day, date & time display
+let todayOverview = document.querySelector(".today-daydatetime");
 let now = new Date();
+todayOverview.innerHTML = formattedDate(now);
 
-let days = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-];
-
-let months = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
-
-let formattedDate = document.querySelector(".today-daydatetime");
-let currentMonth = months[now.getMonth()];
-let currentDay = now.getDate();
-let currentDayOfWeek = days[now.getDay()];
-let currentHour = now.getHours();
-let currentMinutes = now.getMinutes();
-
-formattedDate.innerHTML = `${currentMonth} ${currentDay},<br>${currentDayOfWeek}<br>${currentHour}:${currentMinutes}`;
-
+/// Current temperature of searched city
 function showWeather(response) {
   let cityTemp = Math.round(response.data.main.temp);
   let showCityTemp = document.querySelector(".current-temp-overview");
   showCityTemp.innerHTML = `${cityTemp}°C`;
 }
 
+/// Logging search data and pulling to API source
 function search(event) {
   event.preventDefault();
   let searchInput = document.querySelector("#search-text-input");
@@ -50,20 +60,5 @@ function search(event) {
   axios.get(apiUrl).then(showWeather);
 }
 
-/// function showGeoWeather(response) {
-///  console.log(response);
-/// }
-
-/// function retrievePosition(position) {
-/// let geoApiKey = `5f472b7acba333cd8a035ea85a0d4d4c`;
-///let lon = position.coords.longitude;
-///let lat = position.coords.latitude;
-///let geoUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${geoApiKey}`;
-///axios.get(geoUrl).then(showGeoWeather);
-
 let locationSearch = document.querySelector("#search-form");
 locationSearch.addEventListener("submit", search);
-
-/// let geoLocation = document.querySelector(".current-location-button");
-/// geoLocation.addEventListener("click", geoLocationData);
-/// navigator.geolocation.getCurrentPosition(retrievePosition);
